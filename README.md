@@ -1,6 +1,6 @@
 ## KS Godot CI Dockerfile
 
-Name: `ksjogo/ks-godot-ci:latest`
+Name: `kronbergerspiele/ks-godot-ci:latest`
 
 Based on https://github.com/aBARICHELLO/godot-ci/blob/master/mono.Dockerfile
 Extended with:
