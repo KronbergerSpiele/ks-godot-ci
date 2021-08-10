@@ -1,0 +1,7 @@
+[gd_resource type="EditorSettings" load_steps=2 format=2]
+
+[resource]
+mono/editor/show_info_on_start = false
+mono/editor/external_editor = 4
+mono/builds/build_tool = 3
+mono/builds/print_build_output = true
