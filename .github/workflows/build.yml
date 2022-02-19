@@ -2,6 +2,10 @@ name: Build Godot Project
 
 on:
   workflow_call:
+    inputs:
+      COPY_BRIDGE:
+        required: true
+        type: boolean
 
 jobs:
   build:
@@ -21,6 +25,12 @@ jobs:
           mkdir -v -p ~/.local/share/godot/templates
           rm -rf ~/.local/share/godot/templates/*
           mv /root/.local/share/godot/templates/* ~/.local/share/godot/templates/
+
+      - name: Copy Bridge
+        if: ${{ inputs.COPY_BRIDGE }}
+        run: |
+          rm -f docs/bridge.js
+          cp jsgdbridge/index.js  docs/bridge.js
 
       - name: Build and Export
         run: |
