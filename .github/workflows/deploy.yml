@@ -1,0 +1,51 @@
+name: Deploy Godot Project
+
+on:
+  workflow_call:
+    inputs:
+      ITCHIO_USERNAME:
+        required: true
+        type: string
+      ITCHIO_GAME:
+        required: true
+        type: string
+    secrets:
+      ITCHIO_API:
+        required: true
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    container:
+      image: kronbergerspiele/ks-godot-ci:latest
+    env:
+      ITCHIO_USERNAME: ${{ inputs.ITCHIO_USERNAME }}
+      ITCHIO_GAME: ${{ inputs.ITCHIO_GAME }}
+      BUTLER_API_KEY: ${{ secrets.ITCHIO_API }}
+    steps:
+      - name: Download build
+        if: ${{ !env.ACT }}
+        uses: actions/download-artifact@v1
+        with:
+          name: docs
+          path: docs
+
+      - name: Deploy Pages 🚀
+        if: ${{ !env.ACT }}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./docs
+
+      - name: Prepare Itch.io
+        if: ${{ !env.ACT }}
+        run: |
+          rm ./docs/index.html ./docs/impressum.html
+          mv ./docs/game.html ./docs/index.html
+
+      - name: Deploy Itch.io
+        if: ${{ !env.ACT }}
+        run: |
+          butler push ./docs $ITCHIO_USERNAME/$ITCHIO_GAME:web
