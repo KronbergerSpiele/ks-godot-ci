@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       COPY_BRIDGE:
-        required: true
+        required: false
         type: boolean
 
 jobs:
